@@ -11,6 +11,8 @@ export default defineSchema({
 
   conversations: defineTable({
     members: v.array(v.id("users")),
+    isGroup: v.boolean(),
+    name: v.optional(v.string()),
   }),
 
   messages: defineTable({
@@ -20,4 +22,10 @@ export default defineSchema({
     deleted: v.boolean(),
     createdAt: v.number(),
   }).index("by_conversation", ["conversationId"]),
+
+  typing: defineTable({
+    conversationId: v.id("conversations"),
+    userId: v.id("users"),
+    updatedAt: v.number(),
+  }),
 });
