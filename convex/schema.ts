@@ -3,11 +3,12 @@ import { v } from "convex/values";
 
 export default defineSchema({
   users: defineTable({
-    clerkId: v.string(),
-    name: v.string(),
-    image: v.string(),
-    online: v.boolean(),
-  }).index("by_clerkId", ["clerkId"]),
+  clerkId: v.string(),
+  name: v.string(),
+  image: v.string(),
+  online: v.boolean(),
+  lastSeen: v.optional(v.number()),
+}).index("by_clerkId", ["clerkId"]),
 
   conversations: defineTable({
     members: v.array(v.id("users")),
@@ -23,9 +24,9 @@ export default defineSchema({
   createdAt: v.number(),
 }).index("by_conversation", ["conversationId"]),
 
-  typing: defineTable({
-    conversationId: v.id("conversations"),
-    userId: v.id("users"),
-    updatedAt: v.number(),
-  }),
+ typing: defineTable({
+  conversationId: v.id("conversations"),
+  userId: v.id("users"),
+  updatedAt: v.number(),
+}),
 });

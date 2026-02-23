@@ -30,6 +30,7 @@ export default function ChatWindow({ conversationId }: any) {
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex-1 p-4 overflow-y-auto">
+      
         {messages?.map((msg) => (
   <div
     key={msg._id}

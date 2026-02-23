@@ -17,9 +17,10 @@ export const createUser = mutation({
 
     if (!existing) {
       await ctx.db.insert("users", {
-        ...args,
-        online: true,
-      });
+  ...args,
+  online: true,
+  lastSeen: Date.now(),
+});
     }
   },
 });
