@@ -1,32 +1,70 @@
 "use client";
 
-export default function ChatWindow() {
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
+import { useState } from "react";
+
+export default function ChatWindow({ conversationId }: any) {
+  const { user } = useUser();
+  const users = useQuery(api.users.getUsers);
+  const sendMessage = useMutation(api.messages.sendMessage);
+  const [message, setMessage] = useState("");
+
+  const messages = useQuery(
+    api.messages.getMessages,
+    conversationId ? { conversationId } : "skip"
+  );
+
+  if (!conversationId)
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        Select a user to chat
+      </div>
+    );
+
+  const currentUser = users?.find(
+    (u) => u.clerkId === user?.id
+  );
+
   return (
     <div className="flex-1 flex flex-col">
-      {/* Header */}
-      <div className="p-4 bg-white border-b font-semibold">
-        Select a conversation
+      <div className="flex-1 p-4 overflow-y-auto">
+        {messages?.map((msg) => (
+          <div
+            key={msg._id}
+            className={`mb-2 ${
+              msg.senderId === currentUser?._id
+                ? "text-right"
+                : "text-left"
+            }`}
+          >
+            <span className="bg-blue-500 text-white px-3 py-1 rounded-lg">
+              {msg.body}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3">
-        <div className="text-gray-400 text-center mt-10">
-          No messages yet
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="p-4 bg-white border-t">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 px-4 py-2 rounded-full bg-gray-100 focus:outline-none"
-          />
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600">
-            Send
-          </button>
-        </div>
+      <div className="p-4 flex gap-2">
+        <input
+          className="flex-1 bg-gray-100 p-2 rounded"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button
+          className="bg-blue-500 text-white px-4 rounded"
+          onClick={() => {
+            sendMessage({
+              conversationId,
+              senderId: currentUser!._id,
+              body: message,
+            });
+            setMessage("");
+          }}
+        >
+          Send
+        </button>
       </div>
     </div>
   );

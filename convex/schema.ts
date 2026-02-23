@@ -16,12 +16,12 @@ export default defineSchema({
   }),
 
   messages: defineTable({
-    conversationId: v.id("conversations"),
-    senderId: v.id("users"),
-    body: v.string(),
-    deleted: v.boolean(),
-    createdAt: v.number(),
-  }).index("by_conversation", ["conversationId"]),
+  conversationId: v.id("conversations"),
+  senderId: v.id("users"),
+  body: v.string(),
+  deleted: v.boolean(),
+  createdAt: v.number(),
+}).index("by_conversation", ["conversationId"]),
 
   typing: defineTable({
     conversationId: v.id("conversations"),
