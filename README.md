@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💬 Real-Time Chat Application
 
 A modern full-stack real-time chat application built using **Next.js, Convex, Clerk Authentication, and Tailwind CSS**.
@@ -116,3 +117,4 @@ Java | React | SQL | Blockchain Enthusiast
 ## 📜 License
 
 This project is licensed under the MIT License.
+=======
